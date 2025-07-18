@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Geométrica</title>
+  <style>
+    /* Reset básico */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    /* Estilo global */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f9;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    select, input, button {
+      font-size: 1rem;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    /* Estilo para o select box */
+    select {
+      width: 200px;
+      cursor: pointer;
+      background-color: #fff;
+    }
+
+    /* Estilo para os inputs */
+    input {
+      width: 150px;
+      margin-right: 10px;
+    }
+
+    /* Estilo para o botão de ação */
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .inputs {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .inputs label {
+      width: 100%;
+    }
+
+    /* Estilo do grupo de botões */
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .button-group button {
+      width: 150px;
+      padding: 10px 20px;
+    }
+
+    /* Área de resultado */
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #28a745;
+      text-align: center;
+      font-size: 1.1rem;
+    }
+
+    @media (max-width: 768px) {
+      .inputs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .button-group button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calculadora Geométrica</h2>
+
+  <label for="forma">Escolha a forma geométrica:</label>
+  <select id="forma" onchange="mostrarInputs()">
+    <option value="">-- Selecione --</option>
+    <option value="quadrado">Quadrado</option>
+    <option value="retangulo">Retângulo</option>
+    <option value="paralelogramo">Paralelogramo</option>
+    <option value="trapezio">Trapézio</option>
+    <option value="losango">Losango</option>
+    <option value="triangulo">Triângulo</option>
+    <option value="circulo">Círculo</option>
+    <option value="esfera">Esfera</option>
+    <option value="elipse">Elipse</option>
+    <option value="cilindro">Cilindro</option>
+  </select>
+
+  <div class="inputs" id="inputsArea"></div>
+
+  <div class="button-group">
+    <button onclick="calcular('area')">Calcular Área</button>
+    <button onclick="calcular('perimetro')">Calcular Perímetro</button>
+    <button onclick="calcular('volume')">Calcular Volume</button>
+  </div>
+
+  <div id="resultado"></div>
+
+  <script>
+    function mostrarInputs() {
+      const forma = document.getElementById('forma').value;
+      const inputsDiv = document.getElementById('inputsArea');
+      inputsDiv.innerHTML = '';
+
+      const campos = {
+        quadrado: ['Lado'],
+        retangulo: ['Base', 'Altura'],
+        paralelogramo: ['Base', 'Altura', 'Lado'],
+        trapezio: ['Base Maior', 'Base Menor', 'Altura', 'Lado 1', 'Lado 2'],
+        losango: ['Diagonal Maior', 'Diagonal Menor', 'Lado'],
+        triangulo: ['Base', 'Altura', 'Lado 1', 'Lado 2', 'Lado 3'],
+        circulo: ['Raio'],
+        esfera: ['Raio'],
+        elipse: ['Raio Maior', 'Raio Menor'],
+        cilindro: ['Raio', 'Altura']
+      };
+
+      if (forma in campos) {
+        campos[forma].forEach(campo => {
+          inputsDiv.innerHTML += `<label>${campo}: <input type="number" step="any" id="${campo.replace(/\s/g, '')}"></label>`;
+        });
+      }
+    }
+
+    function calcular(tipo) {
+      const forma = document.getElementById('forma').value;
+      const get = (id) => parseFloat(document.getElementById(id)?.value || 0);
+      let resultado = '';
+
+      switch (forma) {
+        case 'quadrado':
+          const lado = get('Lado');
+          if (tipo === 'area') resultado = lado * lado;
+          else if (tipo === 'perimetro') resultado = 4 * lado;
+          else resultado = 'Quadrado não possui volume.';
+          break;
+          // [continua com outros casos]
+      }
+
+      document.getElementById('resultado').innerText = `Resultado: ${typeof resultado === 'number' ? resultado.toFixed(2) : resultado}`;
+    }
+  </script>
+
+</body>
+</html>

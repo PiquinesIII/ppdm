@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora Geométrica</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    .inputs {
+      margin-top: 10px;
+    }
+    .inputs label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    #resultado {
+      margin-top: 20px;
+      font-weight: bold;
+      color: green;
+    }
+    .button-group {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Calculadora Geométrica</h2>
+
+  <label for="forma">Escolha a forma geométrica:</label>
+  <select id="forma" onchange="mostrarInputs()">
+    <option value="">-- Selecione --</option>
+    <option value="quadrado">Quadrado</option>
+    <option value="retangulo">Retângulo</option>
+    <option value="paralelogramo">Paralelogramo</option>
+    <option value="trapezio">Trapézio</option>
+    <option value="losango">Losango</option>
+    <option value="triangulo">Triângulo</option>
+    <option value="circulo">Círculo</option>
+    <option value="esfera">Esfera</option>
+    <option value="elipse">Elipse</option>
+    <option value="cilindro">Cilindro</option>
+  </select>
+
+  <div class="inputs" id="inputsArea"></div>
+
+  <div class="button-group">
+    <button onclick="calcular('area')">Calcular Área</button>
+    <button onclick="calcular('perimetro')">Calcular Perímetro</button>
+    <button onclick="calcular('volume')">Calcular Volume</button>
+  </div>
+
+  <div id="resultado"></div>
+
+  <script>
+    function mostrarInputs() {
+      const forma = document.getElementById('forma').value;
+      const inputsDiv = document.getElementById('inputsArea');
+      inputsDiv.innerHTML = '';
+
+      const campos = {
+        quadrado: ['Lado'],
+        retangulo: ['Base', 'Altura'],
+        paralelogramo: ['Base', 'Altura', 'Lado'],
+        trapezio: ['Base Maior', 'Base Menor', 'Altura', 'Lado 1', 'Lado 2'],
+        losango: ['Diagonal Maior', 'Diagonal Menor', 'Lado'],
+        triangulo: ['Base', 'Altura', 'Lado 1', 'Lado 2', 'Lado 3'],
+        circulo: ['Raio'],
+        esfera: ['Raio'],
+        elipse: ['Raio Maior', 'Raio Menor'],
+        cilindro: ['Raio', 'Altura']
+      };
+
+      if (forma in campos) {
+        campos[forma].forEach(campo => {
+          inputsDiv.innerHTML += `<label>${campo}: <input type="number" step="any" id="${campo.replace(/\s/g, '')}"></label>`;
+        });
+      }
+    }
+
+    function calcular(tipo) {
+      const forma = document.getElementById('forma').value;
+      const get = (id) => parseFloat(document.getElementById(id)?.value || 0);
+      let resultado = '';
+
+      switch (forma) {
+        case 'quadrado':
+          const lado = get('Lado');
+          if (tipo === 'area') resultado = lado * lado;
+          else if (tipo === 'perimetro') resultado = 4 * lado;
+          else resultado = 'Quadrado não possui volume.';
+          break;
+          
+
+        case 'retangulo':
+          const baseR = get('Base');
+          const alturaR = get('Altura');
+          if (tipo === 'area') resultado = baseR * alturaR;
+          else if (tipo === 'perimetro') resultado = 2 * (baseR + alturaR);
+          else resultado = 'Retângulo não possui volume.';
+          break;
+
+        case 'paralelogramo':
+          const baseP = get('Base');
+          const alturaP = get('Altura');
+          const ladoP = get('Lado');
+          if (tipo === 'area') resultado = baseP * alturaP;
+          else if (tipo === 'perimetro') resultado = 2 * (baseP + ladoP);
+          else resultado = 'Paralelogramo não possui volume.';
+          break;
+
+        case 'trapezio':
+          const B = get('BaseMaior');
+          const b = get('BaseMenor');
+          const h = get('Altura');
+          const l1 = get('Lado1');
+          const l2 = get('Lado2');
+          if (tipo === 'area') resultado = ((B + b) * h) / 2;
+          else if (tipo === 'perimetro') resultado = B + b + l1 + l2;
+          else resultado = 'Trapézio não possui volume.';
+          break;
+
+        case 'losango':
+          const D = get('DiagonalMaior');
+          const d = get('DiagonalMenor');
+          const ladoL = get('Lado');
+          if (tipo === 'area') resultado = (D * d) / 2;
+          else if (tipo === 'perimetro') resultado = 4 * ladoL;
+          else resultado = 'Losango não possui volume.';
+          break;
+
+        case 'triangulo':
+          const baseT = get('Base');
+          const alturaT = get('Altura');
+          const a = get('Lado1');
+          const b2 = get('Lado2');
+          const c = get('Lado3');
+          if (tipo === 'area') resultado = (baseT * alturaT) / 2;
+          else if (tipo === 'perimetro') resultado = a + b2 + c;
+          else resultado = 'Triângulo não possui volume.';
+          break;
+
+        case 'circulo':
+          const raio = get('Raio');
+          if (tipo === 'area') resultado = Math.PI * raio * raio;
+          else if (tipo === 'perimetro') resultado = 2 * Math.PI * raio;
+          else resultado = 'Círculo não possui volume.';
+          break;
+
+        case 'esfera':
+          const raioEsfera = get('Raio');
+          if (tipo === 'area') resultado = 4 * Math.PI * raioEsfera * raioEsfera;
+          else if (tipo === 'volume') resultado = (4 / 3) * Math.PI * Math.pow(raioEsfera, 3);
+          else resultado = 'Esfera não possui perímetro.';
+          break;
+
+        case 'elipse':
+          const aE = get('RaioMaior');
+          const bE = get('RaioMenor');
+          if (tipo === 'area') resultado = Math.PI * aE * bE;
+          else if (tipo === 'perimetro') resultado = Math.PI * (3*(aE + bE) - Math.sqrt((3*aE + bE)*(aE + 3*bE))); // Aproximação
+          else resultado = 'Elipse não possui volume.';
+          break;
+
+        case 'cilindro':
+          const rC = get('Raio');
+          const hC = get('Altura');
+          if (tipo === 'area') resultado = 2 * Math.PI * rC * (rC + hC);
+          else if (tipo === 'volume') resultado = Math.PI * rC * rC * hC;
+          else if (tipo === 'perimetro') resultado = 2 * Math.PI * rC;
+          break;
+
+        default:
+          resultado = 'Forma não reconhecida.';
+      }
+
+      document.getElementById('resultado').innerText = `Resultado: ${typeof resultado === 'number' ? resultado.toFixed(2) : resultado}`;
+    }
+  </script>
+
+</body>
+</html>
