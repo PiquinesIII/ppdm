@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Página Principal</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <main class="container">
+    <h2>Bem-vindo!</h2>
+    <p>Escolha uma opção:</p>
+    <nav class="nav">
+      <a class="button" href="/users/new">Cadastrar usuário</a>
+      <a class="button" href="/users">Listar usuários</a>
+      <a class="button outline" href="/boom">Testar tela de erro</a>
+    </nav>
+  </main>
+
+  <%- include('partials/footer') %>
+</body>
+</html>
